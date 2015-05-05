@@ -1,0 +1,277 @@
+/* CSS Document */
+
+body 
+{
+	font-family:Helvetica, Arial, Verdana, sans-serif;
+	overflow:scroll;
+	background-image:url('food1.jpg');
+	background-position:center inherit;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+}
+
+.Wrapper 
+{
+	width: 900px;
+	height: 1000px;
+	position: absolute;
+	top: 0px;
+	left: 13%;
+	z-index: 1;
+	background-color:#DB7093;
+	background-image:url('wood.jpg');
+	background-position:center inherit;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	
+}
+
+.Header 
+{
+	width:900px;
+	height:80px;
+	position:absolute;
+	top:30px;
+	left:5px;
+	font-weight:bold;
+	font-size:18px;
+	color:white;
+}
+
+.Menu 
+{
+	width:900px;
+	height:46px;
+	position:absolute;
+	top:80px;
+	left:0px;
+	z-index:2;
+	background-color:#CC3366;
+	text-align: justify
+}
+
+.Menu UL 
+{
+	float:left;
+	margin-top:11px;
+	padding-left:40px;
+
+}
+
+.Menu LI 
+{
+	font-size:14px;
+	font-weight:bold;
+	color:#efe9d2;
+	list-style:none;
+}
+
+.Instruction
+{
+	font-weight:bold;
+	font-size:16px;
+	top:160px;
+	left:18%;
+	color:gray;
+	position:absolute;
+}
+
+.Image
+{
+	width:900px;
+	position:absolute;
+	top:190px;
+	left:25%;
+	z-index: 3;
+
+}
+
+.Content 
+{
+	width:900px;
+	min-height:180px;
+	position:absolute;
+	top:1000px;
+	margin-left:5px;
+}
+
+.Column 
+{
+	width:330px;
+	height:inherit;
+	float:inherit;
+	margin-top:150px;
+	margin-bottom:70px;
+	padding:0px;
+	margin-left:5px;
+}
+
+.Column H1
+{
+	color:#669999;
+	font-size:18px;
+	font-weight:bold;
+	margin-left:5px;
+}
+
+.Column H2 
+{
+	color:#FF6666;
+	font-size:18px;
+	font-weight:bold;
+	margin-left:5px;
+}
+
+.Column P 
+{
+	color:#669999;
+	font-size:12px;
+	margin-left:5px;
+}
+
+.Menu1
+{
+	width:600px;
+	height:46px;
+	left:45%;
+	top:148px;
+	position:absolute;
+	z-index:2;
+	text-align: justify
+}
+
+.Menu1 UL 
+{
+	float:left;
+}
+
+.Menu1 LI 
+{
+	font-size:12px;
+	color:#999999;
+	list-style:none;
+}
+
+.Form2
+{
+	height:inherit;
+	margin-top:140px;
+	margin-bottom:100px;
+	left:140px;
+	width: 600px;
+	height: 70em;
+	border: medium gray double;
+	position:relative;
+	font-size: 11px;
+	font-weight:bold;
+	background-color:#99CC99;
+}
+
+.Textinput
+{
+	border-style: inset;
+	border-width: 2px;
+	font-size: inherit;
+	font-family: monospace;
+	width: 16em;
+	background-color: white;
+	min-height:15px;
+	background-color: #bde9ba;
+	display:inline-block; 
+	padding-top:2px;
+	padding-bottom:2px;
+	padding-right:2px;
+	padding-left:2px;
+	left:10%;
+	size:40;
+}
+
+.List
+{
+border-style: inset;
+border-width: 2px;
+font-size: 12px;
+font-family: monospace;
+width: 15em;
+background-color: white;
+min-height:15px;
+background-color: #bde9ba;
+display:inline-block; 
+margin-right: 1em;
+margin: 5px 0 5px 0;
+padding-top:3px;
+padding-bottom:3px;
+padding-right:3px;
+padding-left:3px;
+
+}
+
+.Table1
+{
+	width:600px;
+	height:700px;
+	top:20%;
+	left:23%;
+	alignment:central;
+	position:absolute
+
+}
+
+.Tableheader
+{
+	background-color:inherit;
+	color:black;
+	border-color:inherit;
+	border:0;
+	font-size:16px;
+	font-weight:bold;
+	color:#999999;
+	
+}
+
+.Table1row
+{	
+	background-color:inherit;
+	color:black;
+	border-color:inherit;
+	border:0;
+	font-size:12px;
+	color:#999999
+	
+	
+}
+
+.Table2
+{
+	height:700px;
+	top:20%;
+	left:20%;
+	position:absolute
+}
+
+.Table2column1
+{	
+	width:100px;
+	background-color:inherit;
+	color:white;
+	border-color:inherit;
+	border:0;
+	font-size:12px;
+	left:20%;
+	color:#999999
+	position:absolute;
+}
+
+.Table2column2
+{	
+	width:700px;
+	background-color:inherit;
+	color:white;
+	border-color:inherit;
+	border:0;
+	font-size:12px;
+	left:70%;
+	color:#999999
+	position:absolute;
+	
+}
