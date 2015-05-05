@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+		<title>Annapurna Indian Cuisine </title>
+		<link href="newmain.css" rel="stylesheet" type="text/css"> 
+	
+	<script type = "text/javascript" >
+		
+		var orderArray = new Array();
+        var custArray = new Array();
+        var completedArray = new Array();
+        
+		div = new Array()
+		div[0] = "Appetizers"
+		div[1] = "Vegetarian"
+		div[2] = "Breads"
+		div[3] = "Rice"
+		div[4] = "Checkout"
+        div[5] = "Report1"
+        div[6] = "Report3"
+		div[7] = "Image"
+		div[8] = "Instruction"
+		
+		
+		function showClickedMenuOption(id) 
+		{	
+			for(var i = 0; i< div.length ; i++)
+			{	
+				if(id != div[i])
+				{
+					document.getElementById(div[i]).style.display = "none";
+				}
+			
+				document.getElementById(id).style.display = "block";
+			}
+		}
+		
+        function validateOrder()
+        {
+            // Atleast one order should be made
+            var appetizerSelected = false;
+            var vegetarianSelected = false;
+            var breadSelected = false;
+            var riceSelected = false;
+            
+            var childDivList = document.getElementById("Appetizers").getElementsByTagName("div");
+
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var child = childDivList[i];
+				
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked)
+						{
+							appetizerSelected = true ; 
+                            break;
+						}	
+					}
+				}
+							
+			}
+
+			var childDivList = document.getElementById("Vegetarian").getElementsByTagName("div");
+
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var child = childDivList[i];
+				
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked)
+						{
+							vegetarianSelected = true ; 
+                            break;
+						}		
+					}
+				}
+				
+			}
+
+			var childDivList = document.getElementById("Breads").getElementsByTagName("div");
+			
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var child = childDivList[i];
+
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked)
+						{
+							breadSelected = true ; 
+						}	
+					}
+				}
+			}
+			
+			var childDivList = document.getElementById("Rice").getElementsByTagName("div");
+			
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var simpleCheckboxChecked = false ;
+				var basmatiCheckboxChecked = false ;
+				var brownCheckboxChecked = false ;
+				var yellowCheckboxChecked = false ;
+				var mexicanCheckboxChecked = false ;
+
+				var child = childDivList[i];
+	
+
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					var inputName = inputCollection[j].getAttribute('name');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice1")
+						{
+							simpleCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice2")
+						{
+							basmatiCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice3")
+						{
+							brownCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice4")
+						{
+							yellowCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice5")
+						{
+							mexicanCheckboxChecked = true ; 
+						}	
+					}
+				}
+                
+                if (simpleCheckboxChecked || basmatiCheckboxChecked || brownCheckboxChecked || yellowCheckboxChecked || mexicanCheckboxChecked)
+                {
+                    riceSelected = true;
+                    break;
+                }
+			}
+            
+            return (appetizerSelected || vegetarianSelected || breadSelected || riceSelected);                    
+        }
+		
+		function parseForm()
+		{
+                   
+			var person = new Object();
+			var order = new Object();
+            
+           
+			
+			var childDivList = document.getElementById("Appetizers").getElementsByTagName("div");
+			var appetizers = new Array();
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var checkboxChecked = false ;
+				var appetizer = new Object();
+				var child = childDivList[i];
+
+				appetizer["id"] = child.id;
+				
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked)
+						{
+							checkboxChecked = true ; 
+						}	
+						else if(inputType === "radio" &&
+							true == inputCollection[j].checked)
+						{
+							value2 = inputCollection[j].value
+							appetizer["spice"] = value2;
+						}	
+					}
+				}
+				appetizer["selected"] = checkboxChecked;
+				
+				for(var k = 0; k < selectCollection.length; k++)
+				{
+					var selectElement = selectCollection[k];
+					var selectIndex = selectElement.selectedIndex;
+					var selectedValue = selectElement.options[selectIndex].value ;
+					appetizer["quantity"] = selectedValue;
+					
+				}	
+                
+                appetizer.toString = function(){
+                    var output = "";
+                    output = output + "[id:" + this.id + "][selected:" + this.selected + "][spice:" + this.spice + "][quantity:" + this.quantity + "]";
+                    return output; 
+                }
+                
+				appetizers.push(appetizer);
+				
+			}
+			order["appetizers"] = appetizers;
+			
+			
+			/*************************************Vegetarian******************************************/
+
+			var childDivList = document.getElementById("Vegetarian").getElementsByTagName("div");
+			var vegetarians = new Array();
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var checkboxChecked = false ;
+				var vegetarian = new Object();
+				var child = childDivList[i];
+
+				vegetarian["id"] = child.id;
+				
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked)
+						{
+							checkboxChecked = true ; 
+						}	
+						else if(inputType === "radio" &&
+							true == inputCollection[j].checked)
+						{
+							value2 = inputCollection[j].value
+							vegetarian["spice"] = value2;
+						}	
+					}
+				}
+				vegetarian["selected"] = checkboxChecked;
+				
+				for(var k = 0; k < selectCollection.length; k++)
+				{
+					var selectElement = selectCollection[k];
+					var selectIndex = selectElement.selectedIndex;
+					var selectedValue = selectElement.options[selectIndex].value ;
+					vegetarian["quantity"] = selectedValue;
+				}	
+                
+                vegetarian.toString = function(){
+                    var output = "";
+                    output = output + "[id:" + this.id + "][selected:" + this.selected + "][spice:" + this.spice + "][quantity:" + this.quantity + "]";
+                    return output; 
+                }
+                
+				vegetarians.push(vegetarian);
+				
+			}
+			
+			order["vegetarians"] = vegetarians;
+			
+			
+			/*************************************Breads******************************************/
+
+			var childDivList = document.getElementById("Breads").getElementsByTagName("div");
+			var breads = new Array();
+			
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var checkboxChecked = false ;
+				var bread = new Object();
+				var child = childDivList[i];
+	
+				bread["id"] = child.id;
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked)
+						{
+							checkboxChecked = true ; 
+						}	
+						else if(inputType === "radio" &&
+							true == inputCollection[j].checked)
+						{
+							value2 = inputCollection[j].value
+							bread["type"] = value2;
+						}	
+					}
+				}
+				bread["selected"] = checkboxChecked;
+				
+				for(var k = 0; k < selectCollection.length; k++)
+				{
+					var selectElement = selectCollection[k];
+					var selectIndex = selectElement.selectedIndex;
+					var selectedValue = selectElement.options[selectIndex].value ;
+					bread["quantity"] = selectedValue;
+				}	
+                
+                bread.toString = function(){
+                    var output = "";
+                    output = output + "[id:" + this.id + "][selected:" + this.selected + "][type:" + this.type + "][quantity:" + this.quantity + "]";
+                    return output; 
+                }
+                
+				breads.push(bread);
+				
+			}
+			
+			order["breads"] = breads;
+			
+			
+			/*************************************Rice******************************************/
+			
+			
+			var childDivList = document.getElementById("Rice").getElementsByTagName("div");
+			var rices = new Array();
+			
+			for(var i = 0; i < childDivList.length; i++)
+			{
+				var simpleCheckboxChecked = false ;
+				var basmatiCheckboxChecked = false ;
+				var brownCheckboxChecked = false ;
+				var yellowCheckboxChecked = false ;
+				var mexicanCheckboxChecked = false ;
+				var addons = new Array();
+				var pastes = new Array();
+				var rice = new Object();
+				var child = childDivList[i];
+	
+				rice["id"] = child.id;
+				var inputCollection = child.getElementsByTagName("input");
+				var selectCollection = child.getElementsByTagName("select");
+				for(var j = 0; j < inputCollection.length; j++)
+				{
+					var inputId = inputCollection[j].getAttribute('id');
+					var inputType = inputCollection[j].getAttribute('type');
+					var inputName = inputCollection[j].getAttribute('name');
+					
+					if( inputId !== null)
+					{
+						if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice1")
+						{
+							simpleCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice2")
+						{
+							whiteCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice3")
+						{
+							brownCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice4")
+						{
+							yellowCheckboxChecked = true ; 
+						}	
+						else if("checkbox" === inputType && true === inputCollection[j].checked
+							&& inputId === "Rice5")
+						{
+							mexicanCheckboxChecked = true ; 
+						}
+						
+						else if(inputType === "radio" && true == inputCollection[j].checked 
+						&& inputName === "group16")
+						{
+							value2 = inputCollection[j].value
+							rice["sauce"] = value2;
+						}	
+						else if(inputType === "radio" && true == inputCollection[j].checked 
+						&& inputName === "group17")
+						{
+							value2 = inputCollection[j].value
+							rice["spice"] = value2;
+						}	
+					}
+				}
+				rice["simpleRiceSelected"] = simpleCheckboxChecked;
+				rice["basmatiRiceSelected"] = basmatiCheckboxChecked;
+				rice["brownRiceSelected"] = brownCheckboxChecked;
+				rice["yellowRiceSelected"] = yellowCheckboxChecked;
+				rice["mexicanRiceSelected"] = mexicanCheckboxChecked;
+				
+				for(var k = 0; k < selectCollection.length; k++)
+				{
+					
+					var selectElement = selectCollection[k];
+					var selectName = selectElement.getAttribute('name');
+					
+					if(selectName === "addons")
+					{
+						for (i=0; i<selectElement.options.length; i++) 
+						{
+							if (selectElement.options[i].selected) 
+							{
+							  addons.push(selectElement.options[i].value);
+							}
+						}
+						rice["addons"] = addons;
+					}
+					else if(selectName === "Paste")
+					{
+						for (i=0; i<selectElement.options.length; i++) 
+						{
+							if (selectElement.options[i].selected) 
+							{
+							  pastes.push(selectElement.options[i].value);
+							}
+						}
+						rice["pastes"] = pastes;
+					}
+				}	
+                
+                rice.toString = function(){
+                    var output = "";
+                    output = output + "[simpleRiceSelected:" + this.simpleRiceSelected + "][basmatiRiceSelected:" + this.basmatiRiceSelected + "][brownRiceSelected:" + this.brownRiceSelected + "][yellowRiceSelected:" + this.yellowRiceSelected + "][mexicanRiceSelected:" + this.mexicanRiceSelected + "]" ;
+                    
+                    for (var i=0;i<this.addons.length;++i)
+                    {
+                        output = output + "[addon:" + this.addons[i] + "]" ;
+                    }
+                    
+                    for (var i=0;i<this.pastes.length;++i)
+                    {
+                        output = output + "[paste:" + this.pastes[i] + "]" ;
+                    }
+                    
+                    return output; 
+                }
+			
+				rices.push(rice);
+				
+			}
+            
+            
+			
+			order["rices"] = rices;
+            
+             order.toString = function(){
+                var output = "";
+                if (this.hasOwnProperty("appetizers"))
+                {
+                    output = output + "appetizers[";
+                    for (var i=0;i<this.appetizers.length;++i)
+                    {
+                        output = output + "[" + String(this.appetizers[i]) + "]";
+                    }
+                    output = output + "]";
+                }
+                if (this.hasOwnProperty("vegetarians"))
+                {
+                    output = output + "vegetarians[";
+                    for (var i=0;i<this.vegetarians.length;++i)
+                    {
+                        output = output + "[" + String(this.vegetarians[i]) + "]";
+                    }
+                    output = output + "]";
+                }
+                
+                if (this.hasOwnProperty("breads"))
+                {
+                    output = output + "breads[";
+                    for (var i=0;i<this.breads.length;++i)
+                    {
+                        output = output + "[" + String(this.breads[i]) + "]";
+                    }
+                    output = output + "]";
+                }
+                if (this.hasOwnProperty("rices"))
+                {
+                    output = output + "rices[";
+                    for (var i=0;i<this.rices.length;++i)
+                    {
+                        output = output + "[" + String(this.rices[i]) + "]";
+                    }
+                    output = output + "]";
+                }
+                
+                return output;
+                
+                
+            };
+			
+			orderArray.push(order);
+            
+            
+		}
+	</script>
+	<script type = "text/javascript">
+    
+    function moveToCheckout()
+    {
+        if (true === validateOrder())
+        {
+            parseForm();
+            showClickedMenuOption('Checkout');
+            document.form2.reset();
+            document.getElementById('City').selectedIndex = -1;
+            document.getElementById('Paymentmethod').selectedIndex = 0;
+			document.getElementById('payArray').selectedIndex = -1;
+            document.getElementById('Tip').selectedIndex = 0;
+			document.getElementById('tipArray').selectedIndex = -1;
+        }
+        else
+        {
+            alert("Please select atleast one appetizer, Entree, Bread or Rice Order");
+        }
+    }
+	
+	function submitOrder()
+	{
+        
+        var cust = new Object();
+        
+		var firstnameInput = document.getElementById('Firstname').value;
+		if( firstnameInput == "" )
+		{
+			document.getElementById("Firstnamemsg").style.display="";
+			document.getElementById('Firstname').focus() ;
+			return;
+		}
+		else
+		{
+			document.getElementById("Firstnamemsg").style.display="none";
+		}
+        
+        cust["firstName"] = firstnameInput;
+		
+		var lastnameInput = document.getElementById('Lastname').value;
+		if( lastnameInput == "")
+		{
+			document.getElementById("Lastnamemsg").style.display="";
+			document.getElementById('Lastname').focus() ;
+			return;
+		}
+		else
+		{
+			document.getElementById("Lastnamemsg").style.display="none";
+		}
+        
+        cust["lastName"] = lastnameInput;
+		
+		var addInput = document.getElementById('Addline1').value;
+		if( addInput == "")
+		{
+			document.getElementById('Addressmsg').style.display="";
+			document.getElementById('Addline1').focus() ;
+			return;
+		}
+		else
+		{
+			document.getElementById("Addressmsg").style.display="none";
+		}
+        
+        cust["address1"] = addInput;
+        cust["address2"] = document.getElementById('Addline2').value;
+        
+		var cityElement = document.getElementById('City');
+        var cityIndex = cityElement.selectedIndex;
+        if (-1 === cityIndex)
+        {
+			document.getElementById('Citymsg').style.display="";
+            document.getElementById('City').focus();
+            return;
+        }
+		else
+		{
+			document.getElementById("Citymsg").style.display="none";
+		}
+        var cityValue = cityElement.options[cityIndex].value ;
+        cust["city"] = cityValue;
+		
+		var zipInput = document.getElementById('Zip').value;
+		if( zipInput == "" ||isNaN( zipInput ) ||zipInput.length !== 5 )
+		{
+			document.getElementById('Zipmsg').style.display="";
+			document.getElementById('Zip').focus() ;
+			return;
+		}
+		else
+		{
+			document.getElementById("Zipmsg").style.display="none";
+		}
+		cust["zip"] = zipInput;
+        
+		var telephoneInput = document.getElementById('Telephone').value;
+		if( telephoneInput == "" ||isNaN( telephoneInput ) ||telephoneInput.length !== 10 )
+		{
+			document.getElementById('Telephonemsg').style.display="";
+			document.getElementById('Telephone').focus() ;
+			return;
+		}
+		else
+		{
+			document.getElementById("Telephonemsg").style.display="none";
+		}
+        
+        cust["telephone"] = telephoneInput;
+		
+		var emailInput = document.getElementById('Email').value;
+		var atpos = emailInput.indexOf("@");
+		var dotpos = emailInput.lastIndexOf(".");
+		if (atpos < 1 || ( dotpos - atpos < 2 )) 
+		{
+		  document.getElementById('Emailmsg').style.display="";
+		  document.getElementById('Email').focus() ;
+		  return ;
+		}
+		else
+		{
+			document.getElementById("Emailmsg").style.display="none";
+		}
+        
+        cust["email"] = emailInput;
+		
+		var dateFormat = /(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-\d{4}/ ;
+		var dateInput = document.getElementById('Date').value;
+		if(!dateInput.match(dateFormat))
+		{
+			document.getElementById('Datemsg').style.display="";
+			document.getElementById('Date').focus() ;
+			return ;
+		}
+		else
+		{
+			document.getElementById("Datemsg").style.display="none";
+		}
+        
+        cust["dateOfDelivery"] = dateInput;
+		
+		var accnumInput = document.getElementById('AccNum').value;
+		if( accnumInput == "" ||isNaN( accnumInput ) ||accnumInput.length !== 16 )
+		{
+			document.getElementById('Accnumbermsg').style.display="";
+			document.getElementById('AccNum').focus() ;
+			return;
+		}
+		else
+		{
+			document.getElementById("Accnumbermsg").style.display="none";
+		}
+        
+        cust["account"] = accnumInput;
+        
+		var pay1Element = document.getElementById('Paymentmethod');
+		var pay1Index = pay1Element.selectedIndex;
+		var paymentValue = "";
+		var payMethodValue = "";
+		if (0 === pay1Index)
+		{
+			document.getElementById('Paymentmsg').style.display="";
+			document.getElementById('Paymentmethod').focus();
+			return;
+		}
+		else
+		{
+			document.getElementById("Paymentmsg").style.display="none";
+		}
+		
+		if(3=== pay1Index)
+		{
+			payMethodValue = pay1Element.options[pay1Index].value ;
+			paymentValue = "On delivery";
+		}
+		else
+		{
+			var pay2Element = document.getElementById('payArray');
+			var pay2Index = pay2Element.selectedIndex;
+			if (-1 === pay2Index)
+			{
+				document.getElementById('Paymentmsg').style.display="";
+				document.getElementById('payArray').focus();
+				return;
+			}
+			else
+			{
+				document.getElementById("Paymentmsg").style.display="none";
+			}
+			
+			paymentValue = pay2Element.options[pay2Index].value ;
+			payMethodValue = pay1Element.options[pay1Index].value ;
+		}
+		cust["payMethod"] = payMethodValue;
+		cust["payDetail"] = paymentValue;
+		
+		var tip1Element = document.getElementById('Tip');
+		var tip1Index = tip1Element.selectedIndex;
+		var tipMethodValue = "";
+		var tipValue = "";
+		if (0 === tip1Index)
+		{
+			document.getElementById('Tipmsg').style.display="";
+			document.getElementById('Tip').focus();
+			return;
+		}
+		else
+		{
+			document.getElementById("Tipmsg").style.display="none";
+		}
+		
+		if(2 === tip1Index)
+		{
+			tipMethodValue = tip1Element.options[tip1Index].value ;
+			tipValue = "0";
+		}
+		else 
+		{
+			var tip2Element = document.getElementById('tipArray');
+			var tip2Index = tip2Element.selectedIndex;
+			if (-1 === tip2Index)
+			{
+				document.getElementById('Tipmsg').style.display="";
+				document.getElementById('tipArray').focus();
+				return;
+			}
+			else
+			{
+				document.getElementById("Tipmsg").style.display="none";
+			}
+			
+			tipValue = tip2Element.options[tip2Index].value ;
+			tipMethodValue = tip1Element.options[tip1Index].value ;
+		}
+		cust["tipMethod"] = tipMethodValue;
+		cust["tipDetail"] = tipValue;
+		      
+        cust["orderIndex"] = orderArray.length - 1;
+        cust["comments"] = document.getElementById('TextArea1').value;
+        
+        cust.toString = function(){
+            var output = "";
+            output = output + "[firstName:" + this.firstName +"]"
+                            + "[lastName:" + this.lastName +"]"
+                            + "[address1:" + this.address1 +"]"
+                            + "[address2:" + this.address2 +"]"
+                            + "[city:" + this.city +"]"
+                            + "[zip:" + this.zip +"]"
+                            + "[telephone:" + this.telephone +"]"
+                            + "[email:" + this.email +"]"
+                            + "[dateOfDelivery:" + this.dateOfDelivery +"]"
+                            + "[account:" + this.account +"]"
+                            + "[payMethod:" + this.payMethod +"]"
+                            + "[payDetail:" + this.payDetail +"]"
+                            + "[payTip:" + this.payTip +"]"
+                            + "[tipAmount:" + this.tipAmount +"]"
+                            + "[comments:" + this.comments +"]";
+                            
+            return output;                
+        }
+        
+        custArray.push(cust);
+        alert("Order successfull - Thanks for shopping with us!!");
+        document.form1.reset();
+        document.form2.reset();
+        showClickedMenuOption('Appetizers');
+        
+	}
+	</script>
+	
+	<script>
+		var payArray = new Array();
+		payArray[0]="";
+		payArray[1]=new Array( "Visa|Visa", "Mastercard|Mastercard", "American Express|American Express", "Discover|Discover", "Chase|Chase" );
+		payArray[2]=new Array( "Bank Of America|Bank Of America", "Citibank|Citibank", "Chase|Chase", "Royal Bank of Scotland|Royal Bank of Scotland", "Duetsch Bank|Duetsch Bank" );
+
+		function updatePaymentOption(selectedpaymentgroup) 
+		{
+			var paymentMethodList=document.form2.Paymentmethod;
+			var Optionlist=document.form2.payArray;
+
+			Optionlist.options.length=0;
+
+			if ( selectedpaymentgroup > 0 && selectedpaymentgroup <= 2) 
+			{
+				for ( var i=0; i< payArray[selectedpaymentgroup].length; i++) 
+				{
+					Optionlist.options[Optionlist.options.length]=
+						new Option(payArray[selectedpaymentgroup][i].split("|")[0], 
+								payArray[selectedpaymentgroup][i].split("|")[1]);
+				}
+			}
+		}
+	</script>
+	
+	<script>
+		var tipArray = new Array();
+		tipArray[0]="";
+		tipArray[1]=new Array( "12.5%|12.5%", "15%|15%", "17.5%|17.5%", "20%|20%");
+
+		function updateTipOption(selectedtipgroup) 
+		{
+			var tipOptionList=document.form2.Paymentmethod;
+			var Optionlist=document.form2.tipArray;
+
+			Optionlist.options.length=0;
+
+			if ( selectedtipgroup > 0 && selectedtipgroup <= 1) 
+			{
+				for ( var i=0; i< tipArray[selectedtipgroup].length; i++) 
+				{
+					Optionlist.options[Optionlist.options.length]=
+						new Option(tipArray[selectedtipgroup][i].split("|")[0], 
+								tipArray[selectedtipgroup][i].split("|")[1]);
+				}
+			}
+		}
+	</script>
+    
+    <script>
+        function showReport()
+        {
+            if (custArray.length <= 0)
+            {
+                alert("No orders made");
+                return;
+            }
+            
+            var table = document.getElementById("dataTable1");
+            var rowCount = table.rows.length;
+            
+            if (rowCount > 1)
+            {
+                for(var i=rowCount-1;i>=1;--i)
+                {
+                    table.deleteRow(i);
+                }
+            }
+            
+            rowCount = 1;
+                                
+            var numCustomers = custArray.length;
+            for (var i=0;i<numCustomers;++i)
+            {
+                var custElement = custArray[i];
+                
+                var orderElement = orderArray[custElement.orderIndex];
+                var row = table.insertRow(rowCount);
+                var cell1 = row.insertCell(0);
+                var element1 = document.createElement("input");
+                element1.type = "text";
+                element1.value = custElement.firstName + " " + custElement.lastName;
+				element1.className = "Table1row";
+				element1.readonly = true;
+                cell1.appendChild(element1);
+                
+                var cell2 = row.insertCell(1);
+                var element2 = document.createElement("input");
+                element2.type = "text";
+                element2.value = custElement.telephone;
+				element2.className = "Table1row";
+                element2.readonly = true;
+                cell2.appendChild(element2);
+                
+                var cell3 = row.insertCell(2);
+                var element3 = document.createElement("input");
+                element3.type = "button";
+                element3.id = "button" + custArray.orderIndex;
+                element3.value = "Order Details";
+				//element3.class = "Table1row";
+                
+                /*
+                (function(custIndex,orderIndex)){
+                    element3.onclick= function() {showOrder(custIndex, orderIndex)};
+                })(i,custElement.orderIndex);
+                */
+                
+                element3.onclick= (function() {
+                    var currentCustIndex = i;
+                    var currentOrderIndex = custElement.orderIndex;
+                    return function() { 
+                        showOrder(currentCustIndex,currentOrderIndex);
+                    }
+                })();
+                
+                cell3.appendChild(element3);
+            }
+            
+            showClickedMenuOption("Report1");
+             
+        }
+        
+        function showOrder(custIndex,orderIndex)
+        {	
+			var table = document.getElementById("dataTable2");
+			var rowCount = table.rows.length;
+			if (rowCount > 0)
+            {
+                for(var i=rowCount-1;i>=0;--i)
+                {
+                    table.deleteRow(i);
+                }
+            }
+			var custElement = custArray[custIndex];
+            var orderElement = orderArray[orderIndex];
+			rowCount = 0 ;
+			
+			//Customer Name
+			var row = table.insertRow(rowCount);
+			var cell1 = row.insertCell(0);
+			var element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Name : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			var cell2 = row.insertCell(1);
+			var element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.firstName + " " + custElement.lastName;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//Customer Add
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Address : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.address1 + " " + custElement.address2;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer city
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "City : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.city;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer zip
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Zip : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.zip;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Telephone : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.telephone;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer email
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Email : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.email;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer dateOfDelivery
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Date Of Delivery : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.dateOfDelivery;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer Account Number
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Account Number : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.account;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer PayMethod
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "PayMethod : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.payMethod;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer PayDetail
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "PayDetail : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.payDetail;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer Tip
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Tip : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.payTip;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//customer Comments
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "Customer's Comments : ";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = custElement.comments;
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//blank row
+			rowCount = rowCount + 1;
+			row = table.insertRow(rowCount);
+			cell1 = row.insertCell(0);
+			element1 = document.createElement("input");
+			element1.type = "text";
+			element1.value = "";
+			element1.className = "Table2column1";
+			element1.readonly = true;
+			cell1.appendChild(element1);
+			
+			cell2 = row.insertCell(1);
+			element2 = document.createElement("input");
+			element2.type = "text";
+			element2.value = "";
+			element2.className = "Table2column2";
+			element2.readonly = true;
+			cell2.appendChild(element2);
+			
+			//Appetizers Details
+			var appetizers = orderElement.appetizers;
+			var appLength = appetizers.length;
+			
+			for(var i = 0; i < appLength ; ++i)
+			{	
+				var appetizer = appetizers[i];
+				if(appetizers[i].selected === true)
+				{
+					rowCount = rowCount + 1;
+					row = table.insertRow(rowCount);
+					cell1 = row.insertCell(0);
+					element1 = document.createElement("input");
+					element1.type = "text";
+					element1.value = appetizer.id;
+					element1.className = "Table2column1";
+					element1.readonly = true;
+					cell1.appendChild(element1);
+					
+					cell2 = row.insertCell(1);
+					element2 = document.createElement("input");
+					element2.type = "text";
+					element2.value = "[spice:" + appetizer.spice + "][quantity:" + appetizer.quantity + "]";
+					element2.className = "Table2column2";
+					element2.readonly = true;
+					cell2.appendChild(element2);
+				}
+			}
+			
+			//vegetarian Details
+			var vegetarians = orderElement.vegetarians;
+			var vegLength = vegetarians.length;
+			
+			for(var i = 0; i < appLength ; ++i)
+			{	
+				var vegetarian = vegetarians[i];
+				if(vegetarians[i].selected === true)
+				{
+					rowCount = rowCount + 1;
+					row = table.insertRow(rowCount);
+					cell1 = row.insertCell(0);
+					element1 = document.createElement("input");
+					element1.type = "text";
+					element1.value = vegetarian.id;
+					element1.className = "Table2column1";
+					element1.readonly = true;
+					cell1.appendChild(element1);
+					
+					cell2 = row.insertCell(1);
+					element2 = document.createElement("input");
+					element2.type = "text";
+					element2.value = "[spice:" + vegetarian.spice + "][quantity:" + vegetarian.quantity + "]";
+					element2.className = "Table2column2";
+					element2.readonly = true;
+					cell2.appendChild(element2);
+				}
+			}
+						
+			//breads Details
+			var breads = orderElement.breads;
+			var breadLength = breads.length;
+			
+			for(var i = 0; i < breadLength ; ++i)
+			{	
+				var bread = breads[i];
+				if(bread.selected === true)
+				{
+					rowCount = rowCount + 1;
+					row = table.insertRow(rowCount);
+					cell1 = row.insertCell(0);
+					element1 = document.createElement("input");
+					element1.type = "text";
+					element1.value = bread.id;
+					element1.className = "Table2column1";
+					element1.readonly = true;
+					cell1.appendChild(element1);
+					
+					cell2 = row.insertCell(1);
+					element2 = document.createElement("input");
+					element2.type = "text";
+					element2.value = "[type:" + bread.type + "][quantity:" + bread.quantity + "]";
+					element2.className = "Table2column2";
+					element2.readonly = true;
+					cell2.appendChild(element2);
+				}
+			}
+			
+			//Rice Details
+			var rices = orderElement.rices;
+			var riceLength = rices.length;
+			
+			for(var i = 0; i < riceLength ; ++i)
+			{	
+				var rice = rices[i];
+				rowCount = rowCount + 1;
+				row = table.insertRow(rowCount);
+				cell1 = row.insertCell(0);
+				element1 = document.createElement("input");
+				element1.type = "text";
+				element1.value = "Rice Types ";
+				element1.className = "Table2column1";
+				element1.readonly = true;
+				cell1.appendChild(element1);
+			
+				var output = "" ;
+					
+				if(rice.simpleRiceSelected)
+				{
+					output = output + "Simple Rice," ;
+				}
+				if(rice.basmatiRiceSelected)
+				{
+					output = output + "Basmati Rice," ;
+				}
+				if(rice.brownRiceSelected)
+				{
+					output = output + "Brown Rice," ;
+				}
+				if(rice.yellowRiceSelected)
+				{
+					output = output + "Yellow Rice," ;
+				}
+				if(rice.mexicanRiceSelected)
+				{
+					output = output + "Mexican Rice," ;
+				}
+				cell2 = row.insertCell(1);
+				element2 = document.createElement("input");
+				element2.type = "text";
+				element2.value = output;
+				element2.className = "Table2column2";
+				element2.readonly = true;
+				cell2.appendChild(element2);
+			
+				//Add-Ons		
+				rowCount = rowCount + 1;
+				row = table.insertRow(rowCount);
+				cell1 = row.insertCell(0);
+				element1 = document.createElement("input");
+				element1.type = "text";
+				element1.value = "Add-Ons :";
+				element1.className = "Table2column1";
+				element1.readonly = true;
+				cell1.appendChild(element1);
+				
+				output = "";
+				for (var i=0;i<rice.addons.length;++i)
+				{
+					output = output + "[addon:" + rice.addons[i] + "]" ;
+				}
+				cell2 = row.insertCell(1);
+				element2 = document.createElement("input");
+				element2.type = "text";
+				element2.value = output;
+				element2.className = "Table2column2";
+				element2.readonly = true;
+				cell2.appendChild(element2);
+				
+				//Pastes
+				rowCount = rowCount + 1;
+				row = table.insertRow(rowCount);
+				cell1 = row.insertCell(0);
+				element1 = document.createElement("input");
+				element1.type = "text";
+				element1.value = "Pastes :";
+				element1.className = "Table2column1";
+				element1.readonly = true;
+				cell1.appendChild(element1);
+				
+				output = "";
+				for (var i=0;i<rice.pastes.length;++i)
+				{
+					output = output + "[paste:" + rice.pastes[i] + "]" ;
+				}
+				cell2 = row.insertCell(1);
+				element2 = document.createElement("input");
+				element2.type = "text";
+				element2.value = output;
+				element2.className = "Table2column2";
+				element2.readonly = true;
+				cell2.appendChild(element2);
+			}
+			
+		showClickedMenuOption("Report3");
+			
+        }
+    </script>
+    
+    <script>
+        
+        function resetForm1()
+        {
+            showClickedMenuOption("Appetizers");
+        }
+        
+        function resetForm2()
+        {
+        }
+        
+        function loadPayment1()
+        {
+            if(document.getElementById('Radio1').checked)
+            {
+                document.getElementById('Payment1').style.display = "block";
+                document.getElementById('Payment2').style.display = "none";
+            }
+        }
+        
+        function loadPayment2()
+        {
+            if(document.getElementById('Radio2').checked)
+            {
+                document.getElementById('Payment2').style.display = "block";
+                document.getElementById('Payment1').style.display = "none";
+            }
+        }
+        
+        function hidePayment()
+        {
+            document.getElementById('Payment1').style.display = "none";  
+            document.getElementById('Payment2').style.display = "none";  
+        }
+        
+        function loadTip()
+        {
+            if(document.getElementById('Radio4').checked)
+            {
+                document.getElementById('Tip1').style.display = "block";
+            }
+        }
+        
+        function hideTip()
+        {
+            document.getElementById('Tip1').style.display = "none";  
+        }
+        
+    </script>
+	</head>
+	
+	
+	<body>
+		<div class="Wrapper">
+			<div class="Header">Annapurna Indian Cuisine Menu</div>
+
+				<div class="Menu">
+					<!--<h1>Annapurna Indian Cuisine Menu</h1> -->
+					<ul>
+						<li><input type= "button" name="appetizers" value="Appetizers" onclick="showClickedMenuOption('Appetizers');" ></a></li>
+					</ul>
+					<ul>
+						<li><input type= "button" name= "vegetarian" value= "Vegetarian Entrees" onclick= "showClickedMenuOption('Vegetarian')" /></li>
+					</ul>
+					<ul>
+						<li><input type= "button" name= "breads" value= "Tandoori Breads" onclick= "showClickedMenuOption('Breads')" /></li>
+					</ul>
+					<ul>
+						<li><input type= "button" name= "rice" value= "Rice Specialties" onclick= "showClickedMenuOption('Rice')" /></li>
+					</ul>
+					<ul>
+						<li><input style= "font-size:12px;font-weight:bold;color:navy;" 
+								type= "button" name="checkout" value="Checkout" onclick= "moveToCheckout()" /></li>
+					</ul>
+					<ul>
+						<li><button type="button" style= "color:navy" value ="view" onclick = "showReport()" />Order Details </li>
+					</ul>
+				</div>
+				
+				<div >
+				    <label id="Instruction" class="Instruction" for="Instruction">To see our menu options click on any of the buttons in the above menu bar!!!</label>
+				</div>
+				
+				<div class= "Image" id="Image" style= "display:block">
+					<img border="0" src="food.jpg" width= "50%" height= "50%">
+				</div>	
+				
+				<div class="Wood"></div>
+				
+				<form name="form1" action="" method="get" onreset="resetForm1()">	
+					<!-- RIGHT COLUMN -->
+					<div class="Column" id="Appetizers" style="display:none;">
+					
+						<h1>Appetizers</h1>
+						<p><b>Vegetable Samosa $3.95</b><br />Deep Fried Patties Stuffed With Mildly Spiced Potatoes And Peas(two pieces)</p>
+						<p><b>Samosa Chole Chaat $4.95</b><br />Samosa and Garbanzos spiced with Mint, Tamarind and Yogurt</p>
+						<p><b>Spinach Onion Pakoras $3.50</b><br />Onion and Spinach Crispy Fritters</p>
+						<p><b>Vada Pav $3.50</b><br />Batter Fried Spicy Potato Patties covered with mint chutney in a Bun</p>
+						<p><b>Bhel Puri $3.50</b><br />Puffed Rice Cereal Mixed With tomato, Onion, And Cilantro With Sweet &amp; Spicy Sauce</p>
+						<p><b>Pav Bhaji $5.95</b><br />Bombay style mix veg and potato curry served with bread for dipping</p>
+				
+						<div id="Menu1" class="Menu1">
+							<ul>
+								<li><b>order</b></li>
+							</ul>
+							<ul>
+								<li><b>quantity</b></li>
+							</ul>
+							<ul>
+								<li><b>hot</b></li>
+							</ul>
+							<ul>
+								<li><b>mild-hot</b></li>
+							</ul>
+							<ul>
+								<li><b>plain</b></li>
+							</ul>
+							</div>
+					
+					
+						<div id= "Vegsamosa">
+							<p style="color:blue;top:173px;position:absolute;left:50%;">
+								<input id= "Vegsamosa1"type="checkbox" name="Vegetable Samosa" value="Vegetable Samosa">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:173px;left:57.7%;" />
+							<select id= "Vegsamosa2" name="Vegetable Samosa ">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+								
+							<p style= "top:173px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id="Vegsamosa3" type="radio" name="group1" value="hot"><br>
+							<p style= "top:173px;position:absolute;left:74.5%;">	
+							<input id="Vegsamosa4" type="radio" name="group1" value="mild-hot"><br>
+							<p style= "top:173px;position:absolute;left:83%;">
+							<input id="Vegsamosa5" type="radio" name="group1" value="plain"><br>
+						</div> 
+					
+						<div id= "SamosaCholeChaat ">
+						
+							<p style="color:blue;top:225px;position:absolute;left:50%;">
+								<input id= "SamosaCholeChaat1" type="checkbox" name="Samosa Chole Chaat " value="Samosa Chole Chaat">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:225px;left:57.7%;" />
+							<select id= "SamosaCholeChaat2" name="Samosa Chole Chaat">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+							
+							<p style= "top:225px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id= "SamosaCholeChaat3" type="radio" name="group2" value="hot"><br>
+							<p style= "top:225px;position:absolute;left:74.5%;">	
+							<input id= "SamosaCholeChaat4" type="radio" name="group2" value="mild-hot"><br>
+							<p style= "top:225px;position:absolute;left:83%;">
+							<input id= "SamosaCholeChaat5" type="radio" name="group2" value="plain"><br>
+						</div>
+					
+						<div id= "SOPakoras" >
+							<p style="color:blue;top:280px;position:absolute;left:50%;">
+								<input id= "SOPakoras1" type="checkbox" name="Spinach Onion Pakoras " value="Spinach Onion Pakoras">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:280px;left:57.7%;" />
+							<select id= "SOPakoras2" name="Spinach Onion Pakoras">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+							
+							<p style= "top:280px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id= "SOPakoras3" type="radio" name="group3" value="hot"><br>
+							<p style= "top:280px;position:absolute;left:74.5%;">	
+							<input id= "SOPakoras4" type="radio" name="group3" value="mild-hot"><br>
+							<p style= "top:280px;position:absolute;left:83%;">
+							<input id= "SOPakoras5" type="radio" name="group3" value="plain"><br>
+						
+						</div>
+					
+						<div id= "VadaPav">
+							<p style="color:blue;top:333px;position:absolute;left:50%;">
+								<input id= "VadaPav1" type="checkbox" name="Vada Pav" value="Vada Pav">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:333px;left:57.7%;" />
+							<select id= "VadaPav2" name="Vada Pav">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+							
+							<p style= "top:333px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id= "VadaPav3" type="radio" name="group4" value="hot"><br>
+							<p style= "top:333px;position:absolute;left:74.5%;">	
+							<input id= "VadaPav4" type="radio" name="group4" value="mild-hot"><br>
+							<p style= "top:333px;position:absolute;left:83%;">
+							<input id= "VadaPav5" type="radio" name="group4" value="plain"><br>
+						
+						</div>
+					
+						<div id="BhelPuri">
+							<p style="color:blue;top:385px;position:absolute;left:50%;">
+								<input id="BhelPuri1" type="checkbox" name="Bhel Puri " value="Bhel Puri ">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:385px;left:57.7%;" />
+							<select id="BhelPuri2" name="Bhel Puri">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+							
+							<p style="top:385px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id="BhelPuri3" type="radio" name="group5" value="hot"><br>
+							<p style="top:385px;position:absolute;left:74.5%;">	
+							<input id="BhelPuri4" type="radio" name="group5" value="mild-hot"><br>
+							<p style= "top:385px;position:absolute;left:83%;">
+							<input id="BhelPuri5" type="radio" name="group5" value="plain"><br>
+						
+						</div>
+					
+						<div id="PavBhaji">
+							<p style="color:blue;top:435px;position:absolute;left:50%;">
+								<input id="PavBhaji1" type="checkbox" name="Pav Bhaji" value="Pav Bhaji">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:435px;left:57.7%;" />
+							<select id="PavBhaji2" name="Pav Bhaji">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+							
+							<p style= "top:435px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id="PavBhaji3" type="radio" name="group6" value="hot"><br>
+							<p style= "top:435px;position:absolute;left:74.5%;">	
+							<input id="PavBhaji4" type="radio" name="group6" value="mild-hot"><br>
+							<p style= "top:435px;position:absolute;left:83%;">
+							<input id="PavBhaji5" type="radio" name="group6" value="plain"><br>
+						
+						</div>
+                        <div id= "Resetorder" style= "top:500px;position:absolute;left:83%;">
+                            <input type="reset" value="Reset Order" style="color:red;">
+                        </div>
+					</div>
+					
+					<!-- RIGHT COLUMN -->
+					<div class="Column" id="Vegetarian" style= "display: none;">
+						<h1>Vegetarian Entrees</h1>
+						<p><b>Tadka Dal $7.95</b><br>Lentils cooked With Onion, Ginger, Garlic and Spices</p>
+						<p><b>Dal Makhani 7.95</b><br>Cream Lentils cooked With Spices and Herbs</p>
+						<p><b>Aloo Gobi $7.95</b><br>Cauliflower and potato cooked with tomato, onion, herbs and spices</p>
+						<p><b>Bhindi Masala $8.95</b><br>Okra And Onion, Ginger And Garlic Mild Spices Topped With Cilantro</p>
+						<p><b>Mix Vegetable Korma $8.95</b><br>Assorted Seasonal Fresh Vegetables Cooked With Spices</p>
+						<p><b>Mutter Paneer $8.95</b><br>Chunks of Cottage Cheese With Green Peas Cooked In Tomato Based Gravy</p>
+					
+						<div class="Menu1">
+							<ul>
+								<li><b>order</b></li>
+							</ul>
+							<ul>
+								<li><b>quantity</b></li>
+							</ul>
+							<ul>
+								<li><b>hot</b></li>
+							</ul>
+							<ul>
+								<li><b>mild-hot</b></li>
+							</ul>
+							<ul>
+								<li><b>plain</b></li>
+							</ul>
+						</div>
+				
+						<div id="Tadka">
+							<p style="color:blue;top:172px;position:absolute;left:50%;">
+								<input id="Tadka1" type="checkbox" name="Tadka Dal" value="Tadka Dal">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:172px;left:57.7%;" />
+							<select id="Tadka2" name="Vegetarian">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:172px;position:absolute;left:66.5%;">	
+							<input id="Tadka3" type="radio" name="group7" value="hot"><br>
+							<p style= "top:172px;position:absolute;left:74.5%;">	
+							<input id="Tadka4" type="radio" name="group7" value="mild-hot"><br>
+							<p style= "top:172px;position:absolute;left:83%;">
+							<input id="Tadka5" type="radio" name="group7" value="plain"><br>
+						</div>
+					
+						<div id = "Dal" >
+							<p style="color:blue;top:211px;position:absolute;left:50%;">
+								<input id = "Dal1" type="checkbox" name="Dal Makhani" value="Dal Makhani">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:211px;left:57.7%;" />
+							<select id = "Dal2" name= "Dal" >
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:211px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id = "Dal3" type="radio" name="group8" value="hot"><br>
+							<p style= "top:211px;position:absolute;left:74.5%;">	
+							<input id = "Dal4" type="radio" name="group8" value="mild-hot"><br>
+							<p style= "top:211px;position:absolute;left:83%;">
+							<input id = "Dal5" type="radio" name="group8" value="plain"><br>
+						</div>
+					
+						<div id = "Aloo" >
+							<p style="color:blue;top:255px;position:absolute;left:50%;">
+								<input id="Aloo1" type="checkbox" name="Aloo Gobi" value="Aloo Gobi">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:255px;left:57.7%;" />
+							<select id = "Aloo2" name="Aloo Gobi">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:255px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id="Aloo3" type="radio" name="group9" value="hot"><br>
+							<p style= "top:255px;position:absolute;left:74.5%;">	
+							<input id="Aloo4" type="radio" name="group9" value="mild-hot"><br>
+							<p style= "top:255px;position:absolute;left:83%;">
+							<input id="Aloo5" type="radio" name="group9" value="plain"><br>
+						</div>
+					
+						<div id = "Bhindi">
+					
+							<p style="color:blue;top:310px;position:absolute;left:50%;">
+								<input id = "Bhindi1" type="checkbox" name="Bhindi Masala" value="Bhindi Masala">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:310px;left:57.7%;" />
+							<select id = "Bhindi2"  name="Appetizers">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:310px;position:absolute;left:66.5%;margin-right: 5px;">	
+							<input id = "Bhindi3" type="radio" name="group10" value="hot"><br>
+							<p style= "top:310px;position:absolute;left:74.5%;">	
+							<input id = "Bhindi4" type="radio" name="group10" value="mild-hot"><br>
+							<p style= "top:310px;position:absolute;left:83%;">
+							<input id = "Bhindi5" type="radio" name="group10" value="plain"><br>
+						</div>
+					
+						<div id = "Mixvegetable" >
+					
+							<p style="color:blue;top:363px;position:absolute;left:50%;">
+								<input id="Mixvegetable1" type="checkbox" name="Mix Vegetable Korma" value="Mix Vegetable Korma">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:363px;left:57.7%;" />
+							<select id="Mixvegetable2" name="Mixvegetable">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:363px;position:absolute;left:66.5%;">	
+							<input id="Mixvegetable3" type="radio" name="group11" value="hot"><br>
+							<p style= "top:363px;position:absolute;left:74.5%;">	
+							<input id="Mixvegetable4" type="radio" name="group11" value="mild-hot"><br>
+							<p style= "top:363px;position:absolute;left:83%;">
+							<input id="Mixvegetable5" type="radio" name="group11" value="plain"><br>
+						</div>
+					
+						<div id = "Mutter">
+					
+							<p style="color:blue;top:408px;position:absolute;left:50%;">
+								<input id = "Mutter1" type="checkbox" name="Mutter Paneer" value="Mutter Paneer">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:408px;left:57.7%;" />
+							<select id = "Mutter2" name="Appetizers">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:408px;position:absolute;left:66.5%;">	
+							<input id = "Mutter3" type="radio" name="group12" value="hot"><br>
+							<p style= "top:408px;position:absolute;left:74.5%;">	
+							<input id = "Mutter4" type="radio" name="group12" value="mild-hot"><br>
+							<p style= "top:408px;position:absolute;left:83%;">
+							<input id = "Mutter5" type="radio" name="group12" value="plain"><br>
+						</div>
+                        <div id= "Resetorder" style= "top:500px;position:absolute;left:83%;">
+                            <input type="reset" value="Reset Order" style= "color:red;">
+                        </div>
+					</div>
+					
+					<!-- RIGHT COLUMN -->
+					<div class="Column" id="Breads" style= "display:none">
+						<h1>Fresh Baked</h1>
+						<p><b>Naan $2.50</b><br>Clay Oven Baked Leavened Bread</p>
+						<p><b>Garlic Naan $2.95</b><br>Leavened Bread Sprinkled With Garlic</p>
+						<p><b>Cheese Naan $3.95</b><br>Leavened Bread Stuffed with mozzarella cheese</p>
+					
+						<div id= "Naan">
+							<p style="color:blue;top:167px;position:absolute;left:50%;">
+								<input id= "Naan1" type="checkbox" name="Naan" value="Naan">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:167px;left:57.7%;" />
+							<select id= "Naan2" name="Appetizers">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+					
+							<p style= "top:167px;position:absolute;left:66.5%;font-size:12px">	
+							<input id= "Naan3" type="radio" name="group13" value="Normal">Normal<br>
+							<p style= "top:167px;position:absolute;left:74.5%;font-size:12px">	
+							<input id= "Naan4" type="radio" name="group13" value="Wheat">Wheat<br>
+							<p style= "top:167px;position:absolute;left:83%;font-size:12px">
+							<input id= "Naan5" type="radio" name="group13" value="With-Butter">With-Butter<br>
+						</div>
+				
+						<div id= "Garlic Naan">
+							<p style="color:blue;top:209px;position:absolute;left:50%;">
+								<input id= "Garlic1" type="checkbox" name="Garlic Naan" value="Garlic Naan">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:209px;left:57.7%;" />
+							<select id= "Garlic2" name="Appetizers">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:209px;position:absolute;left:66.5%;font-size:12px">	
+							<input id= "Garlic3" type="radio" name="group14" value="Normal">Normal<br>
+							<p style= "top:209px;position:absolute;left:74.5%;font-size:12px">	
+							<input id= "Garlic4" type="radio" name="group14" value="Wheat">Wheat<br>
+							<p style= "top:209px;position:absolute;left:83%;font-size:12px">
+							<input id= "Garlic5" type="radio" name="group14" value="plain">With-Butter<br>
+						</div>
+				
+						<div id ="Cheese Naan">
+							<p style="color:blue;top:255px;position:absolute;left:50%;">
+								<input id ="Cheese1" type="checkbox" name="" value="">
+							</p>	
+							<p style=" width:150px;min-height:30px;position:absolute;top:255px;left:57.7%;" />
+							<select id ="Cheese2" name="Appetizers">
+								<option value=1>1 </option>
+								<option value=2>2</option>
+								<option value=3>3</option>
+								<option value=4>4</option>
+								<option value=5>5</option>
+								<option value=6>6</option>
+								<option value=7>7</option>
+								<option value=8>8</option>
+								<option value=9>9</option>
+								<option value=10>10</option>
+							</select>
+							<input type="hidden">
+				
+							<p style= "top:255px;position:absolute;left:66.5%;font-size:12px;display:block">	
+							<input id ="Cheese3" type="radio" name="group15" value="Cottage Cheese">Cottage Cheese<br>
+							<input id ="Cheese4" type="radio" name="group15" value="Cheddar <br>Cheese">Cheddar Cheese<br>
+							<p style= "top:255px;position:absolute;left:83%;font-size:12px;">	
+							<input id ="Cheese5" type="radio" name="group15" value="plain">Extra Cheese on Top<br>
+						</div>
+                        <div id= "Resetorder" style= "top:500px;position:absolute;left:83%;">
+                            <input type="reset" value="Reset Order" style="color:red;">
+                        </div>
+					</div>
+					
+					<div class="Column" id="Rice" style= "display:none">
+						<h1>Rice</h1>
+						<p><b>Make you own Fried Rice $7.95</b></p>
+			
+			
+						<div id= "Rice">
+							<p style= "font-size:12px;left:3%;top:210px;position:absolute;">
+								<input id= "Rice1" type="checkbox" name="vehicle" value="Rice">Simple White Rice <br>
+								<input id= "Rice2" type="checkbox" name="vehicle" value="Rice">Basmati White Rice($1 EXTRA)<br>
+								<input id= "Rice3" type="checkbox" name="vehicle" value="Rice">Brown Rice($1 EXTRA)<br>
+								<input id= "Rice4" type="checkbox" name="vehicle" value="Rice">Yellow Rice<br>
+								<input id= "Rice5" type="checkbox" name="vehicle" value="Rice">Mexican Rice<br>
+								
+							<p style= "font-size:12px;left:27%;top:210px;position:absolute;size:30%;">
+							<select id= "Rice6" name="addons" multiple>
+								<option value="Onion">Onion</option>
+								<option value="Carrot">Carrot</option>
+								<option value="Peas">Peas</option>
+								<option value="Broccoli">Broccoli</option>
+								<option value="Cauliflower ">Cauliflower </option>
+							</select>
+							<input type= "hidden">
+						
+							<p style= "font-size:12px;left:40%;top:210px;position:absolute;size:30%;">
+							<select id= "Rice7" name="Paste" multiple>
+								<option value="Tamarind Paste">Tamarind Paste</option>
+								<option value="Ginger Paste">Ginger Paste</option>
+								<option value="Garlic Paste">Garlic Paste</option>
+								<option value="Tomato Paste">Tomato Paste</option>
+								<option value="Curd Paste">Curd Paste </option>
+							</select>
+							<input type= "hidden">
+						
+							<p style= "top:210px;position:absolute;left:61%;display:block;font-size:12px;">	
+							<input id= "Rice8" type="radio" name="group16" value="Normal sauce">Normal Sauce<br>
+							<input id= "Rice9" type="radio" name="group16" value="Extra Sauce">Extra Sauce<br>
+							<input id= "Rice10" type="radio" name="group16" value="Little Sauce">Little Sauce<br>
+							
+							<p style= "top:210px;position:absolute;left:75%;display: block;font-size:12px;">	
+							<input id= "Rice11" type="radio" name="group17" value="Hot">Hot<br>
+							<input id= "Rice12" type="radio" name="group17" value="Medium-Hot">Medium-Hot<br>
+							<input id= "Rice13" type="radio" name="group17" value="Plain">Plain<br>
+						</div>
+                        <div id= "Resetorder" style= "top:500px;position:absolute;left:83%;">
+                            <input type="reset" value="Reset Order" style= "color:red;">
+                        </div>
+					</div>
+				</form>   
+				
+				
+				<form id= "form2" name="form2" action="" method="get" onreset="resetForm2()">	
+	
+					<div  class="Form2" id="Checkout" style="display:none;">
+						
+						First Name* : <input class="Textinput" id="Firstname"type="text" name="Firstname" style= "margin: 10px 0 5px 51px;">
+						<div id="Firstnamemsg" style="position:relative;color:Red;display:none;" >Please enter First Name.</div><br>
+						
+						Last Name* : <input class="Textinput" id= "Lastname" type="text" name="Lastname" style= "margin: 10px 0 5px 51px;" >
+						<div id="Lastnamemsg" style="color:Red;display:none">Please enter Last Name."</div><br>
+						
+						Address Line1* :<input class="Textinput" id= "Addline1" type="text" name="AddressLine1" style= "margin: 10px 0 5px 33px;" >
+						<div id="Addressmsg" style="color:Red;display:none">Please enter Address.</div><br>
+						
+						Address Line2 : <input class="Textinput" id= "Addline2" type="text" name="AddressLine2" style= "margin: 10px 0 5px 37px;" ><br>
+						<p style="" />
+						<label class="Label" for="Select City">Select City* :</label>
+						<select class= "List" id ="City" name="City" style="margin: 10px 0 5px 53px;">
+							<option value="Austin">Austin</option>
+							<option value="Boston">Boston</option>
+							<option value="Greenville">Greenville</option>
+							<option value="Los Angeles">Los Angeles</option>
+							<option value="Philadelphia">Philadelphia</option>
+							<option value="San Jose">San Jose</option>
+						</select>
+						<div id="Citymsg" style="color:Red;display:none">Please provide city</div>
+						<br >
+						
+						Zip* : <input class="Textinput" id="Zip" type="text" name="Zip" style="margin: 10px 0 5px 92px;">
+						<div id="Zipmsg" style="color:Red;display:none">Please provide a zip in the format #####.</div><br>
+						
+						Telephone Number* : <input class="Textinput" id= "Telephone" type="text" name="Telephone" style= "margin: 10px 0 5px 10px;">
+						<div id="Telephonemsg" style="color:Red;display:none">Please provide a Telephone Number in the format ##########.</div><br>
+						
+						Email* : <input class="Textinput" id= "Email" type="text" name="Email" style="margin: 10px 0 5px 79px;" >
+						<div id="Emailmsg" style="color:Red;display:none">Please enter correct email ID.</div><br>
+						
+						Date of Delivery* : <input class="Textinput" id ="Date" type="text" name="Date" style="margin: 10px 0 5px 26px;">
+						<div id="Datemsg" style="color:Red;display:none">'Date of Delivery' must be in format: DD-MM-YYYY</div> <br >
+						
+						<label class="Label" for="Payment Method" style="top:55%;position:absolute;" >Payment Method*:</label>
+						<select class="List" id="Paymentmethod" name="PaymentMethod" size="4" onChange="updatePaymentOption(this.selectedIndex)" style="margin: 10px 0 5px 121px;width:182px;" >
+						<option selected>Select Payment Method:</option>
+						<option value="Credit-Card">Credit-Card</option>
+						<option value="Bank-Account">Bank-Account</option>
+						<option value="Cash">Cash</option>
+						</select>
+						
+						<select id= "payArray" name="pay1" size="3" style="width: 150px" onClick="alert(this.options[this.options.selectedIndex].value)">
+						</select>
+						<div id="Paymentmsg" style="color:Red;display:none">Not a valid payment selection.</div>
+						<br >
+			            
+						Account Number*: <input class="Textinput" id= "AccNum" type="text" name="Account Number" style="margin: 20px 0 5px 30px;" ><br>
+						<div id="Accnumbermsg" style="color:Red;display:none">Please provide a valid Account Number in the format ##############.</div>
+						
+						<label for="Tip">Tip*: </label>
+						<select class= "List" id ="Tip" name="tip" onChange="updateTipOption(this.selectedIndex)" style="margin: 20px 0 5px 100px;" >
+                                <option selected>are you giving tip</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                        </select>
+						
+						<select id= "tipArray" name="tiparray" size="4" style="width: 150px" onClick="alert(this.options[this.options.selectedIndex].value)">
+						</select>
+						<div id="Tipmsg" style="color:Red;display:none">Please provide Tip.</div> 
+						<br >
+                          
+						<div id = "Textarea" >
+							<textarea id = "TextArea1" rows="4" cols="50" name="comment">Enter your comments here...</textarea>
+						
+						</div>
+						
+						<div>
+							<button style ="font-weight:bold;border:medium black groove;color:black;left:80%;top:95%;position:absolute;" type="button" value ="submit" onclick = "submitOrder()" autofocus>Submit Order</button>
+						</div>
+                        <div style="top:95%;position:absolute;right:80%;border:red;">
+                            <input type="reset" value="Reset Checkout" style= "color:red;">
+                        </div>
+						<div style="top:90%;position:absolute;color:black;">
+                            <label for="Instruction">Note::Fields with '*' can not be blank!!</label>
+                        </div>
+						
+					</div>
+				</form>
+                
+                <div class="Table1" id="Report1" style="display:none;border:0;" >
+                    <table id="dataTable1" width="350px" style= "background-color:inherit;">
+                    <tr>
+                        <td><input class="Tableheader" type="text" value="Name" readonly/></td>
+                        <td><input class="Tableheader" type="text" value="Telephone" readonly/></td>
+                        <td><input class="Tableheader" type="text" value="Order Details" readonly/></td>
+                    </tr>
+                    </table>
+                    
+                </div>
+				                
+                <div class="Column" id="Report2" style="display:none;">
+                    <textarea id = "TextArea2" rows="4" cols="50" name="orderDetails" readonly></textarea>                    
+                </div>
+				
+				<div class="Table2" id="Report3" style="display:none;border:0;" >
+                    <table id="dataTable2" style= "width:inherit;background-color:inherit;">
+                    <tr>
+                        
+                    </tr>
+                    </table>
+                    
+                </div>
+		</div>
+	</body>
+</html>
+			
+				
+			
+				
+			
+			
+			
+			
